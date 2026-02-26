@@ -1,38 +1,33 @@
-# Financial Document Analyzer - Debug Assignment
+# Financial Document Analyzer 📊🤖
 
-## Project Overview
-A comprehensive financial document analysis system that processes corporate reports, financial statements, and investment documents using AI-powered analysis agents.
+An enterprise-ready, multi-agent AI API built with FastAPI, CrewAI, and Celery. This system ingests financial documents (PDFs), extracts critical data, and utilizes specialized AI agents to generate structured, strictly factual investment insights. 
 
-## Getting Started
+It features a non-blocking asynchronous architecture using a Redis message queue and persistent SQLite storage.
 
-### Install Required Libraries
-```sh
-pip install -r requirement.txt
-```
+## 🐛 Bugs Found & Fixed
 
-### Sample Document
-The system analyzes financial documents like Tesla's Q2 2025 financial update.
+During development, several critical issues were identified and resolved to ensure logically perfect and deterministic execution:
 
-**To add Tesla's financial document:**
-1. Download the Tesla Q2 2025 update from: https://www.tesla.com/sites/default/files/downloads/TSLA-Q2-2025-Update.pdf
-2. Save it as `data/sample.pdf` in the project directory
-3. Or upload any financial PDF through the API endpoint
+1. **Dependency Hell (Pydantic Validation Clashes)**
+   * **Issue:** The original setup suffered from severe version conflicts between `langchain-core` (using Pydantic V2) and `crewai==0.130.0` (expecting Pydantic V1), causing immediate crashes when defining tools.
+   * **Fix:** Bypassed Langchain decorators and implemented a clean, pure Python class inheriting directly from `crewai.tools.BaseTool`. Locked `openai`, `langchain-core`, and `crewai` to a mathematically stable matrix in `requirements.txt`.
+2. **Prompt Hallucinations & Context Window Overflows**
+   * **Issue:** The AI was prone to hallucinating numbers, and large PDFs would exceed the OpenAI token limits. Also, dynamic variables like `{query}` were improperly placed in static Agent definitions.
+   * **Fix:** Removed dynamic variables from the `agents.py` definitions and moved them strictly to task execution. Implemented a robust `MAX_CHARS` limit and a newline-cleanup loop in `tools.py` to ensure high-fidelity, readable text extraction.
+3. **Synchronous Server Blocking (Timeout Risks)**
+   * **Issue:** Executing a 2-minute CrewAI process directly inside a FastAPI POST endpoint would freeze the server and cause HTTP timeouts for the user.
+   * **Fix:** Completely decoupled the AI execution from the web server by implementing a Celery worker and a Redis message broker.
 
-**Note:** Current `data/sample.pdf` is a placeholder - replace with actual Tesla financial document for proper testing.
+## ✨ Bonus Features Implemented
 
-# You're All Not Set!
-🐛 **Debug Mode Activated!** The project has bugs waiting to be squashed - your mission is to fix them and bring it to life.
+* **Queue Worker Model:** Integrated **Celery + Redis** to handle concurrent API requests asynchronously. The server returns a `task_id` instantly while the heavy AI processing happens safely in the background.
+* **Database Integration:** Implemented modern SQLAlchemy 2.0 ORM (`Mapped` types) with an SQLite database to permanently store analysis results, track job statuses (`pending`, `completed`, `failed`), and prevent data loss.
 
-## Debugging Instructions
+## 🚀 Setup and Usage Instructions
 
-1. **Identify the Bug**: Carefully read the code in each file and understand the expected behavior. There is a bug in each line of code. So be careful.
-2. **Fix the Bug**: Implement the necessary changes to fix the bug.
-3. **Test the Fix**: Run the project and verify that the bug is resolved.
-4. **Repeat**: Continue this process until all bugs are fixed.
-
-## Expected Features
-- Upload financial documents (PDF format)
-- AI-powered financial analysis
-- Investment recommendations
-- Risk assessment
-- Market insights
+### 1. Prerequisites
+Ensure you have Python 3.11+ and a running Redis server.
+For Arch-based Linux distributions:
+```bash
+sudo pacman -S redis
+sudo systemctl enable --now redis
