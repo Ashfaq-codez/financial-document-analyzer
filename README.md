@@ -45,26 +45,29 @@ pip install -r requirements.txt
 
 ### Create a .env file in the root directory and add your OpenAI API key:
 
-
+```bash
 OPENAI_API_KEY=sk-YourSecretKeyHere
+```
 
 ### 3. Running the Application
 Because of the asynchronous architecture, you need two terminals.
 
 ### Terminal 1: Start the Web API
-
+```bash
 python main.py
+```
 
 ### Terminal 2: Start the Background Worker
-
+```bash
 celery -A celery_worker.celery_app worker --loglevel=info
+```
 
 # 📖 API Documentation
 
 Interactive Swagger documentation is available at http://localhost:8000/docs while the server is running.
 
 ## Endpoints
-
+```bash
 GET /
 
 Health check. Returns API status.
