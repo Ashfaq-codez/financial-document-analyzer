@@ -1,0 +1,21 @@
+# crewai==0.130.0
+# crewai-tools==0.47.1
+# fastapi==0.110.3
+# uvicorn
+# python-dotenv
+# langchain-community
+# python-multipart
+fastapi==0.110.3
+uvicorn
+python-multipart
+python-dotenv
+crewai==0.130.0
+crewai-tools==0.47.1
+langchain-community
+langchain-openai<0.3.0
+openai>=1.90.0,<2.0.0
+langchain-core>=0.3.72,<1.0.0
+sqlalchemy
+celery
+redis
+pypdf

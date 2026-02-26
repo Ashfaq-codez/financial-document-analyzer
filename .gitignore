@@ -1,0 +1,17 @@
+# Environments
+.env
+venv/
+env/
+
+# Python Cache
+__pycache__/
+*.pyc
+
+# Database and Uploads
+*.db
+data/
+financial_analyses.db
+
+# Celery / Redis logs
+celerybeat-schedule
+*.log
