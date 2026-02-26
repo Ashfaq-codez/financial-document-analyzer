@@ -31,6 +31,7 @@ For Arch-based Linux distributions:
 ```bash
 sudo pacman -S redis
 sudo systemctl enable --now redis
+```
 
 ### 2. Environment Setup
 
@@ -40,8 +41,9 @@ Clone the repository and set up the virtual environment:
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
+```
 
-###Create a .env file in the root directory and add your OpenAI API key:
+### Create a .env file in the root directory and add your OpenAI API key:
 
 
 OPENAI_API_KEY=sk-YourSecretKeyHere
