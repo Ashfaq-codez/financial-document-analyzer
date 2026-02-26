@@ -33,8 +33,10 @@ sudo pacman -S redis
 sudo systemctl enable --now redis
 
 ### 2. Environment Setup
+
 Clone the repository and set up the virtual environment:
 
+```bash
 python -m venv venv
 source venv/bin/activate
 pip install -r requirements.txt
@@ -54,10 +56,12 @@ python main.py
 ### Terminal 2: Start the Background Worker
 
 celery -A celery_worker.celery_app worker --loglevel=info
-📖 API Documentation
+
+# 📖 API Documentation
+
 Interactive Swagger documentation is available at http://localhost:8000/docs while the server is running.
 
-### Endpoints
+## Endpoints
 
 GET /
 
