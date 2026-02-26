@@ -31,3 +31,52 @@ For Arch-based Linux distributions:
 ```bash
 sudo pacman -S redis
 sudo systemctl enable --now redis
+
+### 2. Environment Setup
+Clone the repository and set up the virtual environment:
+
+python -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+###Create a .env file in the root directory and add your OpenAI API key:
+
+
+OPENAI_API_KEY=sk-YourSecretKeyHere
+
+### 3. Running the Application
+Because of the asynchronous architecture, you need two terminals.
+
+### Terminal 1: Start the Web API
+
+python main.py
+
+### Terminal 2: Start the Background Worker
+
+celery -A celery_worker.celery_app worker --loglevel=info
+📖 API Documentation
+Interactive Swagger documentation is available at http://localhost:8000/docs while the server is running.
+
+### Endpoints
+
+GET /
+
+Health check. Returns API status.
+
+POST /analyze
+
+Description: Uploads a PDF and queues it for analysis.
+
+Payload: multipart/form-data (file: PDF, query: string).
+
+Returns: Instantly returns a task_id and status_url.
+
+GET /status/{task_id}
+
+Description: Polls the status of a queued task.
+
+Returns: JSON object containing current status (pending, completed, failed) and the resulting analysis if finished.
+
+GET /analyses
+
+Description: Fetches the full historical log of all processed documents from the SQLite database.
