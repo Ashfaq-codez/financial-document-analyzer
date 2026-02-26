@@ -1,4 +1,4 @@
-# Financial Document Analyzer 📊🤖
+# Financial Document Analyzer 📊
 
 An enterprise-ready, multi-agent AI API built with FastAPI, CrewAI, and Celery. This system ingests financial documents (PDFs), extracts critical data, and utilizes specialized AI agents to generate structured, strictly factual investment insights. 
 
